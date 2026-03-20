@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>許品浩 — AI 網站設計 × 數據分析</title>
+  <meta name="description" content="用 AI 幫你打造高轉換率網站。1 週內交付，費用透明，台灣接案。"/>
+
+  <!-- ✅ 修改1: 換成你真實的 GA4 Measurement ID，例如 G-ABC123XYZ -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-EL0Q1S1KWT"></script>
+  <script>
+    window.dataLayer=window.dataLayer||[];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js',new Date());
+    gtag('config','G-EL0Q1S1KWT'); // ← 換成你的真實 ID
+    function track(a,l){gtag('event',a,{event_category:'CTA',event_label:l});}
+  </script>
+
+  <!-- EmailJS SDK — 表單實際送出用 -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+
+  <style>
+    :root{
+      --white:#ffffff;
+      --off:#f5f5f7;
+      --off2:#e8e8ed;
+      --text:#1d1d1f;
+      --mid:#6e6e73;
+      --light:#86868b;
+      --accent:#0071e3;
+      --accent2:#0077ed;
+      --line:#d2d2d7;
+      --font:'Inter','Noto Sans TC',sans-serif;
+      --r:18px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:var(--font);background:var(--white);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+    a{text-decoration:none;color:inherit;}
+    img{display:block;max-width:100%;}
+
+    /* Nav */
+    nav{
+      position:sticky;top:0;z-index:100;
+      background:rgba(255,255,255,.85);
+      backdrop-filter:blur(20px);
+      -webkit-backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--line);
+      height:52px;
+      display:flex;align-items:center;
+    }
+    .nav-inner{
+      max-width:1200px;margin:0 auto;padding:0 24px;
+      width:100%;display:flex;align-items:center;justify-content:space-between;
+    }
+    .nav-logo{font-size:.88rem;font-weight:600;color:var(--text);letter-spacing:-.2px;}
+    .nav-links{display:flex;gap:28px;list-style:none;}
+    .nav-links a{font-size:.82rem;color:var(--mid);transition:color .15s;}
+    .nav-links a:hover{color:var(--accent);}
+    .nav-cta{
+      font-size:.82rem;font-weight:500;color:var(--accent);
+      padding:7px 16px;border-radius:100px;
+      border:1px solid var(--accent);
+      transition:background .15s,color .15s;
+    }
+    .nav-cta:hover{background:var(--accent);color:var(--white);}
+    @media(max-width:768px){.nav-links{display:none;}}
+
+    /* Hero */
+    .hero{
+      max-width:1200px;margin:0 auto;padding:100px 24px 80px;
+      display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;
+    }
+    .hero-tag{font-size:.78rem;font-weight:500;color:var(--accent);letter-spacing:.5px;margin-bottom:20px;}
+    .hero h1{
+      font-size:clamp(2.4rem,5vw,4rem);
+      font-weight:600;line-height:1.05;letter-spacing:-1.5px;
+      color:var(--text);margin-bottom:20px;
+    }
+    .hero h1 em{font-style:normal;color:var(--accent);}
+    .hero-sub{font-size:1.05rem;line-height:1.7;color:var(--mid);font-weight:300;margin-bottom:36px;}
+    .hero-ctas{display:flex;gap:12px;flex-wrap:wrap;}
+    .btn-primary{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:14px 28px;border-radius:100px;
+      background:var(--accent);color:var(--white);
+      font-size:.9rem;font-weight:500;
+      border:none;cursor:pointer;
+      transition:background .15s,transform .1s;
+    }
+    .btn-primary:hover{background:var(--accent2);transform:scale(1.02);}
+    .btn-secondary{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:14px 28px;border-radius:100px;
+      background:var(--off);color:var(--text);
+      font-size:.9rem;font-weight:500;
+      border:none;cursor:pointer;
+      transition:background .15s,transform .1s;
+    }
+    .btn-secondary:hover{background:var(--off2);transform:scale(1.02);}
+
+    /* Hero visual */
+    .hero-visual{
+      background:var(--off);border-radius:24px;
+      padding:40px;display:flex;flex-direction:column;gap:16px;
+    }
+    .hv-bar{
+      height:8px;border-radius:100px;
+      background:linear-gradient(90deg,var(--accent) var(--w,60%),var(--off2) var(--w,60%));
+    }
+    .hv-card{
+      background:var(--white);border-radius:14px;padding:20px 24px;
+      display:flex;align-items:center;justify-content:space-between;
+      box-shadow:0 1px 3px rgba(0,0,0,.06);
+    }
+    .hv-label{font-size:.82rem;color:var(--mid);font-weight:400;}
+    .hv-val{font-size:1.4rem;font-weight:600;color:var(--text);}
+    .hv-val.blue{color:var(--accent);}
+    .hv-tag{font-size:.7rem;font-weight:500;padding:4px 10px;border-radius:100px;background:#e3f0ff;color:var(--accent);}
+    @media(max-width:768px){
+      .hero{grid-template-columns:1fr;padding:60px 24px 40px;}
+      .hero-visual{display:none;}
+    }
+
+    /* Stats strip */
+    .stats-strip{background:var(--off);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+    .stats-inner{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;}
+    .stat{
+      flex:1;padding:32px 0;
+      border-right:1px solid var(--line);
+      display:flex;flex-direction:column;gap:4px;
+      padding-left:40px;
+    }
+    .stat:first-child{padding-left:0;}
+    .stat:last-child{border-right:none;}
+    .stat-num{font-size:2rem;font-weight:600;color:var(--text);letter-spacing:-1px;}
+    .stat-label{font-size:.8rem;color:var(--mid);}
+    @media(max-width:600px){.stats-inner{flex-wrap:wrap;}.stat{flex:0 0 50%;border-right:none;border-bottom:1px solid var(--line);}}
+
+    /* Section base */
+    .section{max-width:1200px;margin:0 auto;padding:100px 24px;}
+    .section-label{font-size:.78rem;font-weight:500;color:var(--accent);letter-spacing:.5px;margin-bottom:12px;}
+    .section-title{font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:600;letter-spacing:-1px;line-height:1.1;margin-bottom:8px;}
+    .section-sub{font-size:1rem;color:var(--mid);font-weight:300;margin-bottom:56px;}
+    hr.divider{border:none;border-top:1px solid var(--line);max-width:1200px;margin:0 auto;}
+
+    /* Services */
+    .svc-list{display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;}
+    .svc-row{
+      background:var(--white);
+      display:grid;grid-template-columns:1fr 2fr 1fr;
+      gap:40px;align-items:start;padding:48px 40px;
+      transition:background .15s;
+    }
+    .svc-row:hover{background:var(--off);}
+    .svc-num{font-size:.72rem;font-weight:500;color:var(--light);letter-spacing:1px;}
+    .svc-icon{font-size:1.6rem;margin-bottom:12px;display:block;}
+    .svc-name{font-size:1.2rem;font-weight:600;margin-bottom:8px;letter-spacing:-.3px;}
+    .svc-desc{font-size:.88rem;line-height:1.7;color:var(--mid);}
+    .svc-price{font-size:1.1rem;font-weight:600;color:var(--accent);text-align:right;}
+    .svc-features{list-style:none;margin-top:12px;display:flex;flex-direction:column;gap:6px;}
+    .svc-features li{font-size:.8rem;color:var(--mid);display:flex;align-items:center;gap:6px;}
+    .svc-features li::before{content:'✓';color:var(--accent);font-size:.72rem;}
+    @media(max-width:768px){.svc-row{grid-template-columns:1fr;gap:16px;padding:32px 24px;}.svc-price{text-align:left;}}
+
+    /* Portfolio */
+    .portfolio-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+    .port-card{
+      border-radius:var(--r);overflow:hidden;
+      border:1px solid var(--line);
+      background:var(--off);
+      cursor:pointer;
+      transition:transform .2s,box-shadow .2s;
+    }
+    /* ✅ 修改5: 無障礙 — keyboard focus 樣式 */
+    .port-card:hover,.port-card:focus{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.08);outline:none;}
+    .port-card:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+    .port-preview{
+      height:220px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:3rem;
+      background:var(--off2);
+    }
+    .port-preview.mcd{background:linear-gradient(135deg,#DA291C,#c02016);}
+    .port-body{padding:24px;}
+    .port-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+    .port-tag{font-size:.7rem;font-weight:500;padding:3px 10px;border-radius:100px;background:var(--off2);color:var(--mid);}
+    .port-name{font-size:1rem;font-weight:600;margin-bottom:6px;}
+    .port-desc{font-size:.83rem;color:var(--mid);line-height:1.6;}
+    .port-link{display:inline-flex;align-items:center;gap:4px;font-size:.82rem;font-weight:500;color:var(--accent);margin-top:12px;}
+    @media(max-width:768px){.portfolio-grid{grid-template-columns:1fr;}}
+
+    /* Mock McDonald's inside card */
+    .mock-mcd{width:100%;height:100%;display:flex;flex-direction:column;padding:16px;gap:8px;}
+    .mock-nav-w{display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,.2);padding:5px 10px;border-radius:6px;}
+    .mock-logo-w{width:20px;height:20px;background:#FFC72C;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:.6rem;font-weight:900;color:#DA291C;}
+    .mock-btn-w{background:#FFC72C;color:#1a1a1a;font-size:.55rem;font-weight:700;padding:2px 7px;border-radius:100px;}
+    .mock-hero-w{flex:1;border-radius:6px;background:linear-gradient(180deg,rgba(0,0,0,.2),rgba(0,0,0,.5)),url('https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=300&q=50') center/cover;display:flex;flex-direction:column;justify-content:flex-end;padding:10px;}
+    .mock-h-w{font-size:.65rem;font-weight:700;color:#fff;}
+    .mock-cta-w{display:inline-block;margin-top:4px;background:#DA291C;color:#fff;font-size:.5rem;font-weight:700;padding:3px 8px;border-radius:100px;width:fit-content;}
+
+    /* Process */
+    .process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;}
+    .proc-card{background:var(--white);padding:36px 28px;transition:background .15s;}
+    .proc-card:hover{background:var(--off);}
+    .proc-num{font-size:.7rem;font-weight:500;color:var(--light);letter-spacing:1px;margin-bottom:20px;}
+    .proc-title{font-size:1rem;font-weight:600;margin-bottom:8px;}
+    .proc-desc{font-size:.83rem;color:var(--mid);line-height:1.6;}
+    .proc-time{margin-top:16px;font-size:.75rem;font-weight:500;color:var(--accent);}
+    @media(max-width:900px){.process-grid{grid-template-columns:1fr 1fr;}}
+    @media(max-width:560px){.process-grid{grid-template-columns:1fr;}}
+
+    /* Pricing */
+    .price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+    .price-card{
+      border:1px solid var(--line);border-radius:var(--r);
+      padding:36px 28px;background:var(--white);
+      display:flex;flex-direction:column;
+      transition:border-color .15s,transform .15s;
+      position:relative;overflow:hidden;
+    }
+    .price-card:hover{border-color:var(--accent);transform:translateY(-3px);}
+    .price-card.featured{border-color:var(--accent);background:linear-gradient(180deg,#f0f7ff,var(--white));}
+    .price-badge{
+      position:absolute;top:0;right:0;
+      background:var(--accent);color:var(--white);
+      font-size:.68rem;font-weight:600;
+      padding:4px 14px;border-bottom-left-radius:12px;
+    }
+    .price-tier{font-size:.72rem;font-weight:600;color:var(--mid);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;}
+    .price-amt{font-size:2.4rem;font-weight:600;letter-spacing:-1px;margin-bottom:4px;}
+    .price-amt small{font-size:.9rem;color:var(--mid);}
+    .price-note{font-size:.8rem;color:var(--mid);margin-bottom:24px;}
+    .price-div{height:1px;background:var(--line);margin-bottom:20px;}
+    .price-feats{list-style:none;display:flex;flex-direction:column;gap:10px;flex:1;}
+    .price-feats li{font-size:.83rem;display:flex;align-items:flex-start;gap:8px;color:var(--text);}
+    .ck{color:var(--accent);font-size:.72rem;flex-shrink:0;margin-top:2px;}
+    .xx{color:var(--light);font-size:.72rem;flex-shrink:0;margin-top:2px;}
+    .price-feats li.dim{color:var(--light);}
+    .price-cta{
+      display:block;text-align:center;margin-top:24px;
+      padding:13px;border-radius:100px;font-size:.88rem;font-weight:500;
+      transition:background .15s,color .15s;
+    }
+    .price-cta.ol{border:1px solid var(--line);color:var(--text);}
+    .price-cta.ol:hover{border-color:var(--accent);color:var(--accent);}
+    .price-cta.sl{background:var(--accent);color:var(--white);}
+    .price-cta.sl:hover{background:var(--accent2);}
+    @media(max-width:900px){.price-grid{grid-template-columns:1fr;}}
+
+    /* Contact */
+    .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;}
+    .contact-title{font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:600;letter-spacing:-1px;line-height:1.1;margin-bottom:16px;}
+    .contact-title em{color:var(--accent);font-style:normal;}
+    .contact-desc{font-size:.95rem;line-height:1.7;color:var(--mid);margin-bottom:32px;}
+    .clinks{display:flex;flex-direction:column;gap:12px;}
+    .clink{
+      display:flex;align-items:center;gap:14px;
+      padding:16px 20px;border-radius:14px;
+      border:1px solid var(--line);background:var(--white);
+      transition:border-color .15s,background .15s;
+    }
+    .clink:hover{border-color:var(--accent);background:#f0f7ff;}
+    .clink-icon{width:38px;height:38px;border-radius:10px;background:var(--off);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+    .clink-label{font-size:.72rem;color:var(--light);margin-bottom:2px;}
+    .clink-val{font-size:.88rem;font-weight:500;color:var(--text);}
+    .cform{display:flex;flex-direction:column;gap:14px;}
+    .cf-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+    .cf-g{display:flex;flex-direction:column;gap:6px;}
+    .cf-label{font-size:.75rem;font-weight:500;color:var(--mid);}
+    .cf-in{
+      width:100%;padding:13px 16px;
+      background:var(--off);border:1px solid var(--line);
+      border-radius:12px;color:var(--text);
+      font-family:var(--font);font-size:.9rem;
+      outline:none;transition:border-color .15s,background .15s;
+    }
+    .cf-in:focus{border-color:var(--accent);background:var(--white);}
+    .cf-in::placeholder{color:var(--light);}
+    textarea.cf-in{resize:vertical;min-height:110px;}
+
+    /* ✅ 修改2: 送出按鈕 loading 狀態 */
+    .btn-primary:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+
+    @media(max-width:768px){.contact-grid{grid-template-columns:1fr;}.cf-row{grid-template-columns:1fr;}}
+
+    /* Footer */
+    footer{background:var(--off);border-top:1px solid var(--line);padding:40px 24px;}
+    .footer-inner{
+      max-width:1200px;margin:0 auto;
+      display:flex;align-items:center;justify-content:space-between;
+      flex-wrap:wrap;gap:16px;
+    }
+    .footer-logo{font-size:.88rem;font-weight:600;color:var(--text);}
+    .footer-copy{font-size:.78rem;color:var(--light);}
+    .footer-links{display:flex;gap:20px;}
+    .footer-links a{font-size:.78rem;color:var(--mid);transition:color .15s;}
+    .footer-links a:hover{color:var(--accent);}
+
+    /* Toast */
+    .toast{
+      position:fixed;bottom:24px;right:24px;
+      background:var(--text);color:var(--white);
+      padding:13px 20px;border-radius:12px;
+      font-size:.88rem;font-weight:500;z-index:999;
+      transform:translateY(80px);opacity:0;
+      transition:transform .3s,opacity .3s;
+      box-shadow:0 8px 32px rgba(0,0,0,.15);
+    }
+    .toast.show{transform:translateY(0);opacity:1;}
+    .toast.success{background:#1a7f37;}
+    .toast.error{background:#c0392b;}
+
+    /* Reveal */
+    .reveal{opacity:0;transform:translateY(24px);transition:opacity .6s,transform .6s;}
+    .reveal.visible{opacity:1;transform:none;}
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <div class="nav-logo">品浩.dev</div>
+      <ul class="nav-links">
+        <li><a href="#services">服務</a></li>
+        <li><a href="#portfolio">作品</a></li>
+        <li><a href="#pricing">收費</a></li>
+        <li><a href="#contact">聯絡</a></li>
+      </ul>
+      <a href="#contact" class="nav-cta" onclick="track('nav_cta','Navbar')">免費諮詢</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div>
+      <div class="hero-tag">台灣 AI 網站設計師 × 數據分析</div>
+      <h1>用 <em>AI</em> 打造<br/>你的數位存在</h1>
+      <p class="hero-sub">我是許品浩，結合 AI 工具與程式技術，1 週內幫你交付高轉換率網站。費用透明，效果優先。</p>
+      <div class="hero-ctas">
+        <a href="#contact" class="btn-primary" onclick="track('hero_primary','Hero')">免費諮詢 →</a>
+        <a href="#portfolio" class="btn-secondary" onclick="track('hero_portfolio','Hero')">查看作品</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hv-card">
+        <div><div class="hv-label">本月接案</div><div class="hv-val blue">3 個</div></div>
+        <div class="hv-tag">進行中</div>
+      </div>
+      <div class="hv-card">
+        <div><div class="hv-label">平均交付</div><div class="hv-val">7 天</div></div>
+        <div class="hv-tag">準時</div>
+      </div>
+      <div style="padding:8px 0;">
+        <div class="hv-label" style="margin-bottom:8px;font-size:.75rem;">客戶滿意度</div>
+        <div class="hv-bar" style="--w:100%;"></div>
+        <div style="display:flex;justify-content:space-between;margin-top:6px;">
+          <span style="font-size:.72rem;color:var(--light);">0%</span>
+          <span style="font-size:.72rem;font-weight:600;color:var(--accent);">100%</span>
+        </div>
+      </div>
+      <div class="hv-card">
+        <div><div class="hv-label">起始報價</div><div class="hv-val">NT$3,000</div></div>
+        <div class="hv-tag">透明</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-strip">
+    <div class="stats-inner">
+      <div class="stat"><div class="stat-num">7天</div><div class="stat-label">平均交付時間</div></div>
+      <div class="stat"><div class="stat-num">AI×</div><div class="stat-label">開發效率提升</div></div>
+      <div class="stat"><div class="stat-num">NT$3K</div><div class="stat-label">起始報價</div></div>
+      <div class="stat"><div class="stat-num">100%</div><div class="stat-label">滿意後付款</div></div>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- SERVICES -->
+  <div class="section" id="services">
+    <div class="section-label reveal">核心服務</div>
+    <h2 class="section-title reveal">我能幫你做什麼</h2>
+    <p class="section-sub reveal">三種服務，解決你的數位需求</p>
+    <div class="svc-list reveal">
+      <div class="svc-row">
+        <div>
+          <div class="svc-num">01</div>
+          <span class="svc-icon">🌐</span>
+        </div>
+        <div>
+          <div class="svc-name">AI 網站設計</div>
+          <p class="svc-desc">用 AI 生成 + 人工精修，打造高轉換率 Landing Page。RWD 響應式、Firebase 部署，附 GA4 追蹤設定。</p>
+          <ul class="svc-features">
+            <li>競品分析 + 設計方向規劃</li>
+            <li>完整 RWD 手機版</li>
+            <li>GA4 + Clarity 追蹤整合</li>
+            <li>Firebase 部署上線</li>
+            <li>7 天後修改服務</li>
+          </ul>
+        </div>
+        <div class="svc-price">NT$3,000 起</div>
+      </div>
+      <div class="svc-row">
+        <div>
+          <div class="svc-num">02</div>
+          <span class="svc-icon">⚡</span>
+        </div>
+        <div>
+          <div class="svc-name">AI 自動化工具</div>
+          <p class="svc-desc">Python + AI API 幫你自動化重複工作。自動報表、資料整理、定時爬蟲、LINE Bot 通知。</p>
+          <ul class="svc-features">
+            <li>需求訪談 + 流程設計</li>
+            <li>Python 腳本開發</li>
+            <li>OpenAI / Gemini API 整合</li>
+            <li>定時自動執行設定</li>
+            <li>操作說明文件</li>
+          </ul>
+        </div>
+        <div class="svc-price">NT$5,000 起</div>
+      </div>
+      <div class="svc-row">
+        <div>
+          <div class="svc-num">03</div>
+          <span class="svc-icon">📊</span>
+        </div>
+        <div>
+          <div class="svc-name">運動數據分析</div>
+          <p class="svc-desc">棒球 / 籃球數據視覺化報告。球員表現分析、賽季趨勢、自動化戰報，適合球隊、媒體分析需求。</p>
+          <ul class="svc-features">
+            <li>CPBL / NBA 數據處理</li>
+            <li>Excel / Python 分析</li>
+            <li>互動式視覺化圖表</li>
+            <li>AI 輔助文字解讀</li>
+            <li>定期更新方案可選</li>
+          </ul>
+        </div>
+        <div class="svc-price">NT$3,000 起</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- PORTFOLIO -->
+  <div class="section" id="portfolio">
+    <div class="section-label reveal">作品展示</div>
+    <h2 class="section-title reveal">實際案例</h2>
+    <p class="section-sub reveal">用 AI 輔助開發的真實作品</p>
+    <div class="portfolio-grid reveal">
+      <!-- ✅ 修改5: 加上 role="button" tabindex="0" 以支援鍵盤操作 -->
+      <div class="port-card"
+           role="button"
+           tabindex="0"
+           aria-label="查看麥當勞台灣品牌官網概念"
+           onclick="window.open('https://wilsant1.web.app','_blank'); track('portfolio_click','McDonald');"
+           onkeydown="if(event.key==='Enter'||event.key===' '){window.open('https://wilsant1.web.app','_blank'); track('portfolio_click','McDonald');}">
+        <div class="port-preview mcd">
+          <div class="mock-mcd">
+            <div class="mock-nav-w">
+              <div class="mock-logo-w">M</div>
+              <div style="display:flex;gap:6px;align-items:center;">
+                <span style="font-size:.5rem;color:rgba(255,255,255,.6);">菜單</span>
+                <div class="mock-btn-w">訂餐</div>
+              </div>
+            </div>
+            <div class="mock-hero-w">
+              <div class="mock-h-w">隨時隨地，享受美味</div>
+              <div class="mock-cta-w">🍔 立即訂餐</div>
+            </div>
+          </div>
+        </div>
+        <div class="port-body">
+          <div class="port-tags">
+            <span class="port-tag">Landing Page</span>
+            <span class="port-tag">Firebase</span>
+            <span class="port-tag">GA4</span>
+            <span class="port-tag">Google Maps</span>
+          </div>
+          <div class="port-name">麥當勞台灣品牌官網概念</div>
+          <p class="port-desc">高轉換率網站示範，包含訂餐流程、優惠卡片、Google Maps 門市整合、GA4 追蹤。</p>
+          <div class="port-link">查看網站 →</div>
+        </div>
+      </div>
+
+      <div class="port-card"
+           role="button"
+           tabindex="0"
+           aria-label="查看企癮鎖 AddiLock 官網"
+           onclick="window.open('https://addilock.com','_blank'); track('portfolio_click','AddiLock');"
+           onkeydown="if(event.key==='Enter'||event.key===' '){window.open('https://addilock.com','_blank'); track('portfolio_click','AddiLock');}">
+        <div class="port-preview" style="background:linear-gradient(135deg,#0a0a1a,#1a1040);">
+          <div style="font-size:2.5rem;">🔒</div>
+        </div>
+        <div class="port-body">
+          <div class="port-tags">
+            <span class="port-tag">品牌官網</span>
+            <span class="port-tag">中英雙語</span>
+            <span class="port-tag">自訂網域</span>
+            <span class="port-tag">YouTube</span>
+          </div>
+          <div class="port-name">企癮鎖 AddiLock 官網</div>
+          <p class="port-desc">AI 公司品牌官網，深色高端設計，中英雙語，自訂網域 addilock.com 上線。</p>
+          <div class="port-link">查看網站 →</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- PROCESS -->
+  <div class="section">
+    <div class="section-label reveal">合作流程</div>
+    <h2 class="section-title reveal">4 步驟完成</h2>
+    <p class="section-sub reveal">清楚透明，沒有驚喜</p>
+    <div class="process-grid reveal">
+      <div class="proc-card">
+        <div class="proc-num">STEP 01</div>
+        <div class="proc-title">免費諮詢</div>
+        <p class="proc-desc">LINE 或 Email 聊 30 分鐘，確認需求、風格方向、預算範圍。</p>
+        <div class="proc-time">⏱ 30 分鐘</div>
+      </div>
+      <div class="proc-card">
+        <div class="proc-num">STEP 02</div>
+        <div class="proc-title">報價確認</div>
+        <p class="proc-desc">提供明細報價單，確認後預付 50%，開始進行設計開發。</p>
+        <div class="proc-time">⏱ 當天內</div>
+      </div>
+      <div class="proc-card">
+        <div class="proc-num">STEP 03</div>
+        <div class="proc-title">AI 開發</div>
+        <p class="proc-desc">用 Gemini + Claude 生成初版，人工精修細節，每天同步進度。</p>
+        <div class="proc-time">⏱ 3–5 天</div>
+      </div>
+      <div class="proc-card">
+        <div class="proc-num">STEP 04</div>
+        <div class="proc-title">交付上線</div>
+        <p class="proc-desc">確認滿意後付尾款，Firebase 部署上線，提供 7 天免費修改。</p>
+        <div class="proc-time">⏱ 第 7 天</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- PRICING -->
+  <div class="section" id="pricing">
+    <div class="section-label reveal">收費方案</div>
+    <h2 class="section-title reveal">透明定價</h2>
+    <p class="section-sub reveal">所有方案皆為滿意後付清尾款</p>
+    <div class="price-grid reveal">
+      <div class="price-card">
+        <div class="price-tier">入門方案</div>
+        <div class="price-amt">NT$3,000<small> 起</small></div>
+        <div class="price-note">單頁 Landing Page</div>
+        <div class="price-div"></div>
+        <ul class="price-feats">
+          <li><span class="ck">✓</span> 單頁 RWD 網站</li>
+          <li><span class="ck">✓</span> 最多 4 個區塊</li>
+          <li><span class="ck">✓</span> Firebase 部署</li>
+          <li><span class="ck">✓</span> GA4 基本追蹤</li>
+          <li class="dim"><span class="xx">✗</span> Google Maps</li>
+          <li class="dim"><span class="xx">✗</span> 互動功能</li>
+        </ul>
+        <a href="#contact" class="price-cta ol" onclick="track('pricing','Starter')">詢問報價</a>
+      </div>
+      <div class="price-card featured">
+        <div class="price-badge">最受歡迎</div>
+        <div class="price-tier">標準方案</div>
+        <div class="price-amt">NT$6,000<small> 起</small></div>
+        <div class="price-note">完整品牌官網</div>
+        <div class="price-div"></div>
+        <ul class="price-feats">
+          <li><span class="ck">✓</span> 5–6 個完整區塊</li>
+          <li><span class="ck">✓</span> RWD + 動畫效果</li>
+          <li><span class="ck">✓</span> Google Maps 整合</li>
+          <li><span class="ck">✓</span> GA4 + Clarity 追蹤</li>
+          <li><span class="ck">✓</span> 互動功能</li>
+          <li><span class="ck">✓</span> 7 天免費修改</li>
+        </ul>
+        <a href="#contact" class="price-cta sl" onclick="track('pricing','Standard')">立即諮詢</a>
+      </div>
+      <div class="price-card">
+        <div class="price-tier">進階方案</div>
+        <div class="price-amt">NT$12,000<small> 起</small></div>
+        <div class="price-note">全功能 + AI 整合</div>
+        <div class="price-div"></div>
+        <ul class="price-feats">
+          <li><span class="ck">✓</span> 標準方案全部內容</li>
+          <li><span class="ck">✓</span> AI 功能整合</li>
+          <li><span class="ck">✓</span> 後台管理</li>
+          <li><span class="ck">✓</span> LINE Bot 通知</li>
+          <li><span class="ck">✓</span> 30 天維護支援</li>
+          <li><span class="ck">✓</span> 自訂網域設定</li>
+        </ul>
+        <a href="#contact" class="price-cta ol" onclick="track('pricing','Advanced')">詢問報價</a>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- CONTACT -->
+  <div class="section" id="contact">
+    <div class="contact-grid">
+      <div class="reveal">
+        <div class="section-label">聯絡我</div>
+        <h2 class="contact-title">讓我們<br/><em>開始合作</em></h2>
+        <p class="contact-desc">有任何問題或想法，直接聯絡我。通常 24 小時內回覆。</p>
+        <div class="clinks">
+          <!-- ✅ 修改6: 聯絡資訊由 JS 動態渲染，防止爬蟲直接抓取 -->
+          <a id="clink-line" class="clink" onclick="track('contact','LINE')">
+            <div class="clink-icon">💬</div>
+            <div><div class="clink-label">LINE</div><div class="clink-val" id="line-val"></div></div>
+          </a>
+          <a id="clink-email" class="clink" onclick="track('contact','Email')">
+            <div class="clink-icon">📧</div>
+            <div><div class="clink-label">EMAIL</div><div class="clink-val" id="email-val"></div></div>
+          </a>
+          <a href="https://github.com/20066wildan-arch" target="_blank" class="clink" onclick="track('contact','GitHub')">
+            <div class="clink-icon">💻</div>
+            <div><div class="clink-label">GITHUB</div><div class="clink-val">github.com/20066wildan-arch</div></div>
+          </a>
+          <a href="https://addilock.com" target="_blank" class="clink" onclick="track('contact','AddiLock')">
+            <div class="clink-icon">🔒</div>
+            <div><div class="clink-label">公司官網</div><div class="clink-val">addilock.com</div></div>
+          </a>
+        </div>
+      </div>
+      <div class="reveal">
+        <!-- ✅ 修改4: button 加上 type="button" 避免觸發 form submit -->
+        <div class="cform">
+          <div class="cf-row">
+            <div class="cf-g"><label class="cf-label" for="cf-name">姓名</label><input class="cf-in" type="text" placeholder="你的名字" id="cf-name"/></div>
+            <div class="cf-g"><label class="cf-label" for="cf-contact">聯絡方式</label><input class="cf-in" type="text" placeholder="LINE / Email" id="cf-contact"/></div>
+          </div>
+          <div class="cf-g">
+            <label class="cf-label" for="cf-type">服務類型</label>
+            <select class="cf-in" id="cf-type">
+              <option value="">選擇服務</option>
+              <option>AI 網站設計</option>
+              <option>AI 自動化工具</option>
+              <option>運動數據分析</option>
+              <option>其他需求</option>
+            </select>
+          </div>
+          <div class="cf-g"><label class="cf-label" for="cf-msg">說明需求</label><textarea class="cf-in" placeholder="簡單描述你的需求、預算範圍、希望完成時間…" id="cf-msg"></textarea></div>
+          <!-- ✅ 修改4: type="button" 明確指定，避免意外 submit -->
+          <button type="button" class="btn-primary" id="submit-btn" style="width:100%;justify-content:center;" onclick="submitForm(); track('submit_form','Contact')">送出詢問 →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">品浩.dev</div>
+      <div class="footer-copy">© 2026 許品浩 — AI 網站設計 × 數據分析</div>
+      <div class="footer-links">
+        <a href="#services">服務</a>
+        <a href="#portfolio">作品</a>
+        <a href="#pricing">收費</a>
+        <a href="#contact">聯絡</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    /* ============================================================
+       ✅ 修改6: 聯絡資訊混淆 — 用 JS 拼接，防止爬蟲直接掃描原始碼
+       ============================================================ */
+    (function(){
+      // LINE
+      const lineParts = ['096','6','42','98','95'];
+      const lineNum = lineParts.join('');
+      const lineEl = document.getElementById('clink-line');
+      lineEl.href = 'https://line.me/ti/p/~' + lineNum;
+      document.getElementById('line-val').textContent = lineNum;
+
+      // Email
+      const emailUser = '2006wils' + 'an';
+      const emailDomain = 'gmail' + '.com';
+      const emailFull = emailUser + '@' + emailDomain;
+      const emailEl = document.getElementById('clink-email');
+      emailEl.href = 'mailto:' + emailFull;
+      document.getElementById('email-val').textContent = emailFull;
+    })();
+
+    /* ============================================================
+       ✅ 修改1 (EmailJS): 初始化
+       步驟：
+         1. 到 https://www.emailjs.com 建立帳號（免費方案每月 200 封）
+         2. 建立 Email Service（綁定 Gmail）
+         3. 建立 Email Template，參數名稱用 {{from_name}} {{contact}} {{service_type}} {{message}}
+         4. 把下方三個 ID 換成你自己的
+       ============================================================ */
+    const EMAILJS_PUBLIC_KEY  = 'YxKCk7RdFi5LjNMIA';
+    const EMAILJS_SERVICE_ID  = 'Happy95051444';
+    const EMAILJS_TEMPLATE_ID = 'template_23g2lo8';
+
+    emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+
+    /* ============================================================
+       Reveal on scroll
+       ============================================================ */
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('visible');
+        e.target.querySelectorAll('.svc-row,.proc-card,.price-card,.port-card').forEach((c, i) => {
+          c.style.opacity = '0';
+          c.style.transform = 'translateY(16px)';
+          c.style.transition = `opacity .5s ${i * .08}s, transform .5s ${i * .08}s`;
+          setTimeout(() => { c.style.opacity = '1'; c.style.transform = 'none'; }, i * 80);
+        });
+      });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+    /* ============================================================
+       Toast helper
+       ============================================================ */
+    function showToast(msg, type = '') {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = 'toast show' + (type ? ' ' + type : '');
+      setTimeout(() => t.className = 'toast', 3500);
+    }
+
+    /* ============================================================
+       ✅ 修改2: 表單實際送出（EmailJS）
+       ============================================================ */
+    async function submitForm() {
+      const name    = document.getElementById('cf-name').value.trim();
+      const contact = document.getElementById('cf-contact').value.trim();
+      const svcType = document.getElementById('cf-type').value;
+      const msg     = document.getElementById('cf-msg').value.trim();
+
+      if (!name || !contact) { showToast('⚠️ 請填寫姓名與聯絡方式', 'error'); return; }
+      if (!msg)               { showToast('⚠️ 請描述需求', 'error'); return; }
+
+      const btn = document.getElementById('submit-btn');
+      btn.disabled = true;
+      btn.textContent = '傳送中…';
+
+      try {
+        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+          from_name   : name,
+          contact     : contact,
+          service_type: svcType || '未選擇',
+          message     : msg,
+        });
+
+        showToast('✅ 已成功送出！24 小時內回覆', 'success');
+        document.getElementById('cf-name').value    = '';
+        document.getElementById('cf-contact').value = '';
+        document.getElementById('cf-type').value    = '';
+        document.getElementById('cf-msg').value     = '';
+
+      } catch (err) {
+        console.error('EmailJS error:', err);
+        showToast('❌ 送出失敗，請直接用 LINE / Email 聯絡我', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '送出詢問 →';
+      }
+    }
+  </script>
+</body>
+</html>
